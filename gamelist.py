@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import urllib.request
 import requests as re
 
-#page 32
+#page max - 32 on site xbox360
 
 def parse(pageCurrent = 1, PageSize = 30):
     listArr = {}
@@ -20,7 +20,6 @@ def parse(pageCurrent = 1, PageSize = 30):
     for val in list.select('h2 a',limit=PageSize):
         urlIn = "http://marketplace.xbox.com" + val['href']
         req = urllib.request.Request(urlIn, None, headers)
-        #p = re.get(urlIn)
         p = urllib.request.urlopen(req)
         s = BeautifulSoup(p.read(), 'html.parser')
         price = s.find('span', class_='SilverPrice ProductPrice', text=True)
@@ -40,13 +39,25 @@ def parse(pageCurrent = 1, PageSize = 30):
     return listArr
 
 if __name__ == "__main__":
-    list = parse()
+    list = {}
+    for z in range(1, 3): #1, 2 = parse 1 page OR 1, 3 = parse 2 page
+        list[z] = parse(z)
+    
+    fList = {}
+    i = 1
+    for ls in list:
+        kk = 1
+        for ls in list[i]:
+            fList[kk] = list[i][kk]
+            kk += 1
+        i += 1
+        
     
     print('----------------------')
     i = 1
-    for val in list:
-        print(list[i]['name'])
-        print(list[i]['price'])
+    for val in fList:
+        print(fList[i]['name'])
+        print(fList[i]['price'])
         print('----------------------')
         i += 1
         
