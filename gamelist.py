@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import urllib.request
 import requests as re
+import json
 
 #page max - 32 on site xbox360
 
@@ -42,22 +43,26 @@ if __name__ == "__main__":
     list = {}
     for z in range(1, 3): #1, 2 = parse 1 page OR 1, 3 = parse 2 page
         list[z] = parse(z)
-    
-    fList = {}
-    i = 1
-    for ls in list:
-        kk = 1
-        for ls in list[i]:
-            fList[kk] = list[i][kk]
-            kk += 1
-        i += 1
         
+    f = open('text2.txt', 'w')
+    f.write(json.dumps(list))
+    f.close()
     
-    print('----------------------')
-    i = 1
-    for val in fList:
-        print(fList[i]['name'])
-        print(fList[i]['price'])
-        print('----------------------')
-        i += 1
+#    fList = {}
+#    i = 1
+#    for ls in list:
+#        kk = 1
+#        for ls in list[i]:
+#            fList[kk] = list[i][kk]
+#            kk += 1
+#        i += 1
+#        
+#    
+#    print('----------------------')
+#    i = 1
+#    for val in fList:
+#        print(fList[i]['name'])
+#        print(fList[i]['price'])
+#        print('----------------------')
+#        i += 1
         
