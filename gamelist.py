@@ -2,23 +2,20 @@ from bs4 import BeautifulSoup
 import urllib.request
 import requests as re
 
-listArr = {}
-PageSize = 30
-Page = 1
+#page 32
 
-if __name__ == "__main__":
-    user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64)'
+def parse(pageCurrent = 1, PageSize = 30):
+    listArr = {}
+    user_agent = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.115 Safari/537.36'
     headers = { 'User-Agent' : user_agent }
-    url = "http://marketplace.xbox.com/ru-RU/Games/Xbox360Games?PageSize="+str(PageSize)+"&Page="+str(Page)
+    url = "http://marketplace.xbox.com/ru-RU/Games/Xbox360Games?PageSize="+str(PageSize)+"&sortby=BestSelling&Page="+str(pageCurrent)
     req = urllib.request.Request(url, None, headers)
     page = urllib.request.urlopen(req)
-    
-    #print(page.read())
     
     soup = BeautifulSoup(page.read(), 'html.parser')
     
     list = soup.find('ol', class_='ProductResults GameTiles')
-    #print(list.select('h2 a'))
+    
     i = 0;
     for val in list.select('h2 a',limit=PageSize):
         urlIn = "http://marketplace.xbox.com" + val['href']
@@ -39,14 +36,17 @@ if __name__ == "__main__":
         'name': val['title'],
         'price': sPrice
         }
+        
+    return listArr
 
-    #print(listArr[1]['name'])
-    print('----------------------')
+if __name__ == "__main__":
+    list = parse()
     
+    print('----------------------')
     i = 1
-    for val in listArr:
-        print(listArr[i]['name'])
-        print(listArr[i]['price'])
+    for val in list:
+        print(list[i]['name'])
+        print(list[i]['price'])
         print('----------------------')
         i += 1
         
